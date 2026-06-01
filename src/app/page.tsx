@@ -20,6 +20,12 @@ const categoryColors = [
   "bg-orange-100 text-orange-950 border-orange-200",
 ];
 
+const featurePapers = [
+  "pin-blue torn-paper folded-corner paper-blue grid-paper rotate-[2deg]",
+  "pin-purple receipt-paper paper-pink dot-paper rotate-[-1.8deg]",
+  "pin-green bookmark-paper paper-green lined-paper rotate-[1.2deg]",
+];
+
 export default async function Home() {
   const posts = await getPosts();
 
@@ -57,9 +63,7 @@ export default async function Home() {
                 {features.map((item, index) => (
                   <div
                     key={item.title}
-                    className={`paper-note pin-note torn-paper crumpled paper-shadow border p-5 ${
-                      index === 0 ? "rotate-[1deg] border-sky-200 paper-blue" : index === 1 ? "rotate-[-1deg] border-rose-200 paper-pink" : "rotate-[0.5deg] border-emerald-200 paper-green"
-                    }`}
+                    className={`paper-note pin-note paper-shadow border p-5 ${featurePapers[index]}`}
                   >
                     <item.icon className="mb-3 text-amber-700" />
                     <h2 className="font-black text-stone-950">{item.title}</h2>
