@@ -164,3 +164,17 @@ button, input, textarea, select { font: inherit; }
 .bookmark-paper {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 90%, 0 100%);
 }
+.board-note-position {
+  left: var(--mx);
+  position: absolute;
+  top: var(--my);
+  transform: rotate(var(--r));
+  width: var(--mw);
+}
+@media (min-width: 768px) {
+  .board-note-position {
+    left: var(--x);
+    top: var(--y);
+    width: var(--w);
+  }
+}
