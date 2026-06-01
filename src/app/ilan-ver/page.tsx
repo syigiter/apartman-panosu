@@ -12,7 +12,7 @@ export default async function CreatePostPage({ searchParams }: { searchParams: P
       <Header />
       <section className="mx-auto max-w-4xl px-4 py-10">
         <div className="cork-board board-shadow rounded-[32px] border-[10px] border-amber-950/75 p-4 md:p-7">
-          <div className="paper-note paper-shadow rotate-[-0.6deg] rounded-3xl border border-yellow-200 bg-yellow-50 p-6 md:p-8">
+          <div className="paper-note pin-note torn-paper crumpled paper-shadow rotate-[-0.6deg] border border-yellow-200 paper-yellow p-7 md:p-9">
             <p className="inline-flex items-center gap-2 rounded-full bg-amber-200 px-4 py-2 text-sm font-black text-amber-950">
               <PencilLine size={16} />
               Yeni not kağıdı

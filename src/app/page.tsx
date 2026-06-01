@@ -31,7 +31,7 @@ export default async function Home() {
         <div className="cork-board board-shadow rounded-[32px] border-[10px] border-amber-950/75 p-4 md:p-7">
           <div className="rounded-[22px] border border-white/20 bg-white/12 p-3 backdrop-blur-[1px] md:p-5">
             <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch">
-              <div className="paper-note paper-shadow rotate-[-1.2deg] rounded-3xl border border-yellow-200 bg-yellow-50 p-6 md:p-8">
+              <div className="paper-note pin-note torn-paper crumpled paper-shadow rotate-[-1.2deg] border border-yellow-200 paper-yellow p-7 md:p-9">
                 <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-amber-200 px-4 py-2 text-sm font-black text-amber-950">
                   <Sparkles size={16} />
                   Apartmanın neşeli duyuru duvarı
@@ -57,8 +57,8 @@ export default async function Home() {
                 {features.map((item, index) => (
                   <div
                     key={item.title}
-                    className={`paper-note paper-shadow rounded-2xl border bg-white p-5 ${
-                      index === 0 ? "rotate-[1deg] border-sky-200" : index === 1 ? "rotate-[-1deg] border-rose-200" : "rotate-[0.5deg] border-emerald-200"
+                    className={`paper-note pin-note torn-paper crumpled paper-shadow border p-5 ${
+                      index === 0 ? "rotate-[1deg] border-sky-200 paper-blue" : index === 1 ? "rotate-[-1deg] border-rose-200 paper-pink" : "rotate-[0.5deg] border-emerald-200 paper-green"
                     }`}
                   >
                     <item.icon className="mb-3 text-amber-700" />

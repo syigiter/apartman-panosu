@@ -4,17 +4,18 @@ import type { BoardPost } from "@/lib/mock-data";
 
 export function PostCard({ post }: { post: BoardPost }) {
   const colors = {
-    Duyuru: "bg-amber-50 border-amber-200 rotate-[-0.6deg]",
-    "Kayıp Eşya": "bg-sky-50 border-sky-200 rotate-[0.7deg]",
-    Yardım: "bg-emerald-50 border-emerald-200 rotate-[-0.3deg]",
-    Satılık: "bg-rose-50 border-rose-200 rotate-[0.4deg]",
-    "Komşu Notu": "bg-violet-50 border-violet-200 rotate-[-0.4deg]",
-    "Şikayet/Öneri": "bg-orange-50 border-orange-200 rotate-[0.5deg]",
+    Duyuru: "paper-yellow border-amber-200 rotate-[-1.1deg]",
+    "Kayıp Eşya": "paper-blue border-sky-200 rotate-[0.9deg]",
+    Yardım: "paper-green border-emerald-200 rotate-[-0.8deg]",
+    Satılık: "paper-pink border-rose-200 rotate-[0.7deg]",
+    "Komşu Notu": "paper-purple border-violet-200 rotate-[-0.7deg]",
+    "Şikayet/Öneri": "paper-orange border-orange-200 rotate-[0.8deg]",
   } as const;
-  const color = colors[post.category as keyof typeof colors] ?? "bg-white border-stone-200";
+  const color = colors[post.category as keyof typeof colors] ?? "paper-cream border-stone-200";
 
   return (
-    <article className={`paper-note paper-shadow rounded-2xl border p-5 transition hover:rotate-0 hover:-translate-y-1 ${color}`}>
+    <article className={`paper-note torn-paper crumpled folded-corner paper-shadow border p-6 transition hover:rotate-0 hover:-translate-y-1 ${color}`}>
+      <span className="paper-tape" aria-hidden="true" />
       <div className="mb-3 flex flex-wrap items-center gap-2 text-xs font-bold">
         <span className="rounded-full bg-white/80 px-3 py-1 text-stone-800 shadow-sm">{post.category}</span>
         <span className="rounded-full border border-stone-900 bg-amber-200 px-3 py-1 text-stone-950">{post.type === "ilan" ? "İlan" : "Duvar Yazısı"}</span>
