@@ -3,7 +3,7 @@
 import type { CSSProperties } from "react";
 import { useState } from "react";
 import Link from "next/link";
-import { CornerUpRight, MessageCircle, MoveUpRight, ShieldCheck } from "lucide-react";
+import { MessageCircle, MessageSquarePlus, MoveUpRight, PenLine, ShieldCheck, StickyNote, X } from "lucide-react";
 import type { BoardPost } from "@/lib/mock-data";
 
 type BoardNoteVars = CSSProperties & {
@@ -26,14 +26,14 @@ const categoryColors = [
 ];
 
 const layouts = [
-  { x: 4, y: 9, w: 43, mx: 4, my: 7, mw: 82, r: -4, z: 12 },
-  { x: 36, y: 16, w: 53, mx: 16, my: 28, mw: 80, r: 3, z: 16 },
-  { x: 14, y: 46, w: 44, mx: 3, my: 51, mw: 78, r: -2, z: 10 },
-  { x: 53, y: 41, w: 38, mx: 21, my: 73, mw: 76, r: 5, z: 14 },
-  { x: 7, y: 67, w: 36, mx: 7, my: 91, mw: 72, r: 2, z: 9 },
-  { x: 41, y: 70, w: 46, mx: 20, my: 111, mw: 78, r: -5, z: 11 },
-  { x: 24, y: 28, w: 34, mx: 9, my: 132, mw: 74, r: 6, z: 8 },
-  { x: 62, y: 10, w: 31, mx: 23, my: 153, mw: 70, r: -6, z: 7 },
+  { x: 3, y: 14, w: 34, mx: 5, my: 13, mw: 82, r: -5, z: 12 },
+  { x: 28, y: 23, w: 46, mx: 13, my: 37, mw: 80, r: 3, z: 16 },
+  { x: 58, y: 9, w: 34, mx: 4, my: 63, mw: 76, r: -2, z: 10 },
+  { x: 11, y: 55, w: 38, mx: 20, my: 88, mw: 74, r: 5, z: 14 },
+  { x: 47, y: 51, w: 42, mx: 8, my: 113, mw: 78, r: -4, z: 9 },
+  { x: 69, y: 43, w: 28, mx: 24, my: 139, mw: 70, r: 7, z: 11 },
+  { x: 22, y: 6, w: 30, mx: 10, my: 164, mw: 72, r: 6, z: 8 },
+  { x: 39, y: 69, w: 36, mx: 18, my: 189, mw: 76, r: -6, z: 7 },
 ];
 
 const paperStyles = [
@@ -56,38 +56,103 @@ function noteMeta(post: BoardPost, index: number) {
   return { layout, style };
 }
 
-export function InteractiveBoard({ posts, categories }: { posts: BoardPost[]; categories: string[] }) {
+export function InteractiveBoard({ posts, categories, missingEnv }: { posts: BoardPost[]; categories: string[]; missingEnv?: boolean }) {
   const [activeId, setActiveId] = useState(posts[0]?.id ?? "");
   const [stack, setStack] = useState<Record<string, number>>({});
   const [counter, setCounter] = useState(40);
+  const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
 
   function bringToFront(id: string) {
     setActiveId(id);
+    setMenu(null);
     setCounter((value) => value + 1);
     setStack((value) => ({ ...value, [id]: counter + 1 }));
   }
 
-  return (
-    <section id="pano" className="mx-auto max-w-6xl px-4 pb-14">
-      <div className="mb-5 rounded-3xl border border-stone-200 bg-white/85 p-5 paper-shadow backdrop-blur">
-        <div className="mb-4 flex items-center gap-2">
-          <CornerUpRight className="text-amber-700" size={20} />
-          <h2 className="font-black text-stone-950">Pano köşeleri</h2>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {categories.map((category, index) => (
-            <span key={category} className={`rounded-full border px-3 py-2 text-sm font-bold ${categoryColors[index % categoryColors.length]}`}>
-              {category}
-            </span>
-          ))}
-        </div>
-      </div>
+  function openBoardMenu(event: React.PointerEvent<HTMLDivElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = Math.min(Math.max(event.clientX - rect.left, 16), rect.width - 276);
+    const y = Math.min(Math.max(event.clientY - rect.top, 16), rect.height - 332);
+    setMenu({ x, y });
+  }
 
-      <div className="cork-board board-shadow relative min-h-[1180px] overflow-hidden rounded-[32px] border-[10px] border-amber-950/75 p-4 md:min-h-[760px]">
+  return (
+    <section id="pano" className="h-[calc(100vh-77px)] p-2 md:p-4">
+      <div
+        className="cork-board board-shadow relative h-full overflow-hidden rounded-[28px] border-[10px] border-amber-950/75 p-4"
+        onPointerDown={openBoardMenu}
+      >
         <div className="pointer-events-none absolute inset-5 rounded-[24px] border border-white/20 bg-white/8" />
-        <p className="absolute left-6 top-5 z-[3] rounded-full bg-amber-100/90 px-4 py-2 text-xs font-black text-amber-950 shadow-sm">
-          Kağıdın ucuna tıkla, öne gelsin
+
+        <div
+          className="absolute left-5 top-5 z-[35] max-w-xl rounded-3xl border border-stone-200 bg-white/82 p-3 paper-shadow backdrop-blur"
+          onPointerDown={(event) => event.stopPropagation()}
+        >
+          <div className="mb-2 flex items-center gap-2">
+            <StickyNote className="text-amber-700" size={18} />
+            <h2 className="font-black text-stone-950">Pano köşeleri</h2>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {categories.map((category, index) => (
+              <span key={category} className={`rounded-full border px-3 py-2 text-xs font-bold md:text-sm ${categoryColors[index % categoryColors.length]}`}>
+                {category}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <p
+          className="absolute bottom-5 left-5 z-[35] rounded-full bg-amber-100/90 px-4 py-2 text-xs font-black text-amber-950 shadow-sm"
+          onPointerDown={(event) => event.stopPropagation()}
+        >
+          Boş yere tıkla, seçenekler açılsın
         </p>
+
+        {missingEnv && (
+          <div
+            className="absolute bottom-5 right-5 z-[35] hidden max-w-md rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50/95 p-4 text-xs font-semibold text-amber-950 shadow-lg md:block"
+            onPointerDown={(event) => event.stopPropagation()}
+          >
+            Supabase bağlantısı henüz yok; pano şimdilik örnek notlarla dolu.
+          </div>
+        )}
+
+        {menu && (
+          <div
+            className="absolute z-[120] w-60 rounded-3xl border-2 border-stone-950 bg-yellow-50 p-3 paper-shadow"
+            style={{ left: menu.x, top: menu.y }}
+            onPointerDown={(event) => event.stopPropagation()}
+          >
+            <div className="mb-2 flex items-center justify-between gap-3">
+              <p className="text-sm font-black text-stone-950">Panoya ne asalım?</p>
+              <button
+                type="button"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-stone-800 shadow-sm"
+                onClick={() => setMenu(null)}
+                aria-label="Menüyü kapat"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            <div className="grid gap-2">
+              <Link href="/ilan-ver?type=ilan" className="flex items-center gap-2 rounded-2xl border border-amber-200 bg-amber-100 px-3 py-3 text-sm font-black text-amber-950 transition hover:-translate-y-0.5">
+                <MessageSquarePlus size={18} />
+                Yeni ilan as
+              </Link>
+              <Link href="/ilan-ver?type=duvar-yazisi" className="flex items-center gap-2 rounded-2xl border border-sky-200 bg-sky-100 px-3 py-3 text-sm font-black text-sky-950 transition hover:-translate-y-0.5">
+                <PenLine size={18} />
+                Duvar yazısı bırak
+              </Link>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-1.5">
+          {categories.map((category, index) => (
+              <Link key={category} href={`/ilan-ver?category=${encodeURIComponent(category)}`} className={`rounded-full border px-2.5 py-1.5 text-xs font-bold ${categoryColors[index % categoryColors.length]}`}>
+              {category}
+              </Link>
+          ))}
+            </div>
+          </div>
+        )}
 
         {posts.map((post, index) => {
           const { layout, style } = noteMeta(post, index);
@@ -106,7 +171,10 @@ export function InteractiveBoard({ posts, categories }: { posts: BoardPost[]; ca
           return (
             <article
               key={post.id}
-              onPointerDown={() => bringToFront(post.id)}
+              onPointerDown={(event) => {
+                event.stopPropagation();
+                bringToFront(post.id);
+              }}
               className={`board-note-position paper-note ${style.shape} ${style.shell} paper-shadow border p-5 transition duration-200 ${isActive ? "scale-[1.025]" : "hover:scale-[1.015]"}`}
               style={noteVars}
             >
@@ -137,7 +205,11 @@ export function InteractiveBoard({ posts, categories }: { posts: BoardPost[]; ca
                   <ShieldCheck size={16} className="text-emerald-700" />
                   {post.alias} - gizli
                 </div>
-                <Link href={"/ilan/" + post.id} className="inline-flex items-center gap-2 rounded-full bg-white/85 px-4 py-2 text-sm font-bold text-stone-800 shadow-sm transition hover:bg-stone-950 hover:text-white">
+                <Link
+                  href={"/ilan/" + post.id}
+                  onPointerDown={(event) => event.stopPropagation()}
+                  className="inline-flex items-center gap-2 rounded-full bg-white/85 px-4 py-2 text-sm font-bold text-stone-800 shadow-sm transition hover:bg-stone-950 hover:text-white"
+                >
                   <MessageCircle size={17} />
                   {post.replyCount} cevap
                 </Link>
@@ -145,7 +217,7 @@ export function InteractiveBoard({ posts, categories }: { posts: BoardPost[]; ca
             </article>
           );
         })}
-      </div>
+        </div>
     </section>
   );
 }
