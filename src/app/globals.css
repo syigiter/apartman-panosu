@@ -166,14 +166,24 @@ button, input, textarea, select { font: inherit; }
 }
 .board-note-position {
   left: var(--mx);
+  min-height: var(--mh);
   position: absolute;
   top: var(--my);
   transform: rotate(var(--r));
   width: var(--mw);
 }
+.paper-choice {
+  min-height: 118px;
+}
+.paper-choice .paper-tape {
+  height: 16px;
+  top: -10px;
+  width: 58px;
+}
 @media (min-width: 768px) {
   .board-note-position {
     left: var(--x);
+    min-height: var(--h);
     top: var(--y);
     width: var(--w);
   }

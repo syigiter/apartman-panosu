@@ -3,8 +3,9 @@
 import type { CSSProperties } from "react";
 import { useState } from "react";
 import Link from "next/link";
-import { MessageCircle, MessageSquarePlus, MoveUpRight, PenLine, ShieldCheck, StickyNote, X } from "lucide-react";
+import { ArrowLeft, MessageCircle, MessageSquarePlus, MoveUpRight, PenLine, ShieldCheck, StickyNote, X } from "lucide-react";
 import type { BoardPost } from "@/lib/mock-data";
+import { paperOptions } from "@/lib/paper-options";
 
 type BoardNoteVars = CSSProperties & {
   "--x": string;
@@ -14,6 +15,8 @@ type BoardNoteVars = CSSProperties & {
   "--my": string;
   "--mw": string;
   "--r": string;
+  "--h": string;
+  "--mh": string;
 };
 
 const categoryColors = [
@@ -26,23 +29,14 @@ const categoryColors = [
 ];
 
 const layouts = [
-  { x: 3, y: 14, w: 34, mx: 5, my: 13, mw: 82, r: -5, z: 12 },
-  { x: 28, y: 23, w: 46, mx: 13, my: 37, mw: 80, r: 3, z: 16 },
-  { x: 58, y: 9, w: 34, mx: 4, my: 63, mw: 76, r: -2, z: 10 },
-  { x: 11, y: 55, w: 38, mx: 20, my: 88, mw: 74, r: 5, z: 14 },
-  { x: 47, y: 51, w: 42, mx: 8, my: 113, mw: 78, r: -4, z: 9 },
-  { x: 69, y: 43, w: 28, mx: 24, my: 139, mw: 70, r: 7, z: 11 },
-  { x: 22, y: 6, w: 30, mx: 10, my: 164, mw: 72, r: 6, z: 8 },
-  { x: 39, y: 69, w: 36, mx: 18, my: 189, mw: 76, r: -6, z: 7 },
-];
-
-const paperStyles = [
-  { shell: "paper-yellow dot-paper border-amber-200 tape-wide pin-orange", shape: "torn-paper folded-corner", label: "Duyuru" },
-  { shell: "paper-blue grid-paper border-sky-200 tape-left pin-blue", shape: "torn-paper folded-corner", label: "Kayıp notu" },
-  { shell: "paper-green lined-paper border-emerald-200 tape-right pin-green", shape: "receipt-paper", label: "Yardım çağrısı" },
-  { shell: "paper-pink crumpled border-rose-200 tape-wide pin-purple", shape: "bookmark-paper", label: "Satılık etiketi" },
-  { shell: "paper-purple dot-paper border-violet-200 tape-left pin-purple", shape: "torn-paper folded-corner", label: "Komşu karalaması" },
-  { shell: "paper-orange grid-paper border-orange-200 tape-right pin-orange", shape: "receipt-paper", label: "Öneri fişi" },
+  { x: 3, y: 14, w: 30, h: 245, mx: 5, my: 13, mw: 78, mh: 232, r: -5, z: 12 },
+  { x: 27, y: 22, w: 45, h: 315, mx: 13, my: 38, mw: 82, mh: 285, r: 3, z: 16 },
+  { x: 60, y: 8, w: 26, h: 215, mx: 4, my: 66, mw: 72, mh: 218, r: -2, z: 10 },
+  { x: 10, y: 54, w: 38, h: 270, mx: 20, my: 92, mw: 74, mh: 245, r: 5, z: 14 },
+  { x: 48, y: 50, w: 34, h: 295, mx: 8, my: 120, mw: 78, mh: 258, r: -4, z: 9 },
+  { x: 70, y: 41, w: 22, h: 255, mx: 24, my: 148, mw: 66, mh: 238, r: 7, z: 11 },
+  { x: 21, y: 5, w: 24, h: 230, mx: 10, my: 176, mw: 70, mh: 218, r: 6, z: 8 },
+  { x: 40, y: 68, w: 42, h: 235, mx: 18, my: 205, mw: 80, mh: 228, r: -6, z: 7 },
 ];
 
 function hashText(value: string) {
@@ -52,7 +46,7 @@ function hashText(value: string) {
 function noteMeta(post: BoardPost, index: number) {
   const hash = hashText(post.id + post.category + post.title);
   const layout = layouts[(hash + index) % layouts.length];
-  const style = paperStyles[(hash + index * 3) % paperStyles.length];
+  const style = paperOptions[(hash + index * 3) % paperOptions.length];
   return { layout, style };
 }
 
@@ -61,6 +55,8 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
   const [stack, setStack] = useState<Record<string, number>>({});
   const [counter, setCounter] = useState(40);
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
+  const [menuStep, setMenuStep] = useState<"type" | "paper">("type");
+  const [selectedType, setSelectedType] = useState<"ilan" | "duvar-yazisi">("ilan");
 
   function bringToFront(id: string) {
     setActiveId(id);
@@ -69,24 +65,32 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
     setStack((value) => ({ ...value, [id]: counter + 1 }));
   }
 
-  function openBoardMenu(event: React.PointerEvent<HTMLDivElement>) {
+  function openBoardMenu(event: React.MouseEvent<HTMLDivElement>) {
+    if (event.target !== event.currentTarget) return;
+
     const rect = event.currentTarget.getBoundingClientRect();
-    const x = Math.min(Math.max(event.clientX - rect.left, 16), rect.width - 276);
-    const y = Math.min(Math.max(event.clientY - rect.top, 16), rect.height - 332);
+    const x = Math.min(Math.max(event.clientX - rect.left, 16), rect.width - 336);
+    const y = Math.min(Math.max(event.clientY - rect.top, 16), rect.height - 430);
+    setMenuStep("type");
     setMenu({ x, y });
+  }
+
+  function chooseType(type: "ilan" | "duvar-yazisi") {
+    setSelectedType(type);
+    setMenuStep("paper");
   }
 
   return (
     <section id="pano" className="h-screen p-2 md:p-4">
       <div
         className="cork-board board-shadow relative h-full overflow-hidden rounded-[28px] border-[10px] border-amber-950/75 p-4"
-        onPointerDown={openBoardMenu}
+        onClick={openBoardMenu}
       >
         <div className="pointer-events-none absolute inset-5 rounded-[24px] border border-white/20 bg-white/8" />
 
         <div
           className="absolute right-5 top-5 z-[36] hidden rounded-2xl border-2 border-stone-950 bg-amber-300 px-4 py-3 text-sm font-black text-stone-950 shadow-lg md:block"
-          onPointerDown={(event) => event.stopPropagation()}
+          onMouseDown={(event) => event.stopPropagation()}
         >
           Apartman Panosu
           <span className="block text-[11px] font-bold">Komşu notları burada</span>
@@ -94,7 +98,7 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
 
         <div
           className="absolute left-5 top-5 z-[35] max-w-[calc(100%-40px)] rounded-3xl border border-stone-200 bg-white/82 p-3 paper-shadow backdrop-blur md:max-w-[620px]"
-          onPointerDown={(event) => event.stopPropagation()}
+          onMouseDown={(event) => event.stopPropagation()}
         >
           <div className="mb-2 flex items-center gap-2">
             <StickyNote className="text-amber-700" size={18} />
@@ -111,7 +115,7 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
 
         <p
           className="absolute bottom-5 left-5 z-[35] rounded-full bg-amber-100/90 px-4 py-2 text-xs font-black text-amber-950 shadow-sm"
-          onPointerDown={(event) => event.stopPropagation()}
+          onMouseDown={(event) => event.stopPropagation()}
         >
           Boş yere tıkla, seçenekler açılsın
         </p>
@@ -119,7 +123,7 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
         {missingEnv && (
           <div
             className="absolute bottom-5 right-5 z-[35] hidden max-w-md rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50/95 p-4 text-xs font-semibold text-amber-950 shadow-lg md:block"
-            onPointerDown={(event) => event.stopPropagation()}
+            onMouseDown={(event) => event.stopPropagation()}
           >
             Supabase bağlantısı henüz yok; pano şimdilik örnek notlarla dolu.
           </div>
@@ -127,12 +131,24 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
 
         {menu && (
           <div
-            className="absolute z-[120] w-60 rounded-3xl border-2 border-stone-950 bg-yellow-50 p-3 paper-shadow"
+            className="absolute z-[120] w-72 rounded-3xl border-2 border-stone-950 bg-yellow-50 p-3 paper-shadow"
             style={{ left: menu.x, top: menu.y }}
-            onPointerDown={(event) => event.stopPropagation()}
+            onMouseDown={(event) => event.stopPropagation()}
           >
             <div className="mb-2 flex items-center justify-between gap-3">
-              <p className="text-sm font-black text-stone-950">Panoya ne asalım?</p>
+              <div className="flex items-center gap-2">
+                {menuStep === "paper" && (
+                  <button
+                    type="button"
+                    onClick={() => setMenuStep("type")}
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-stone-800 shadow-sm"
+                    aria-label="Geri dön"
+                  >
+                    <ArrowLeft size={16} />
+                  </button>
+                )}
+                <p className="text-sm font-black text-stone-950">{menuStep === "type" ? "Panoya ne asalım?" : "Kağıdını seç"}</p>
+              </div>
               <button
                 type="button"
                 className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-stone-800 shadow-sm"
@@ -142,23 +158,42 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
                 <X size={16} />
               </button>
             </div>
-            <div className="grid gap-2">
-              <Link href="/ilan-ver?type=ilan" className="flex items-center gap-2 rounded-2xl border border-amber-200 bg-amber-100 px-3 py-3 text-sm font-black text-amber-950 transition hover:-translate-y-0.5">
-                <MessageSquarePlus size={18} />
-                Yeni ilan as
-              </Link>
-              <Link href="/ilan-ver?type=duvar-yazisi" className="flex items-center gap-2 rounded-2xl border border-sky-200 bg-sky-100 px-3 py-3 text-sm font-black text-sky-950 transition hover:-translate-y-0.5">
-                <PenLine size={18} />
-                Duvar yazısı bırak
-              </Link>
-            </div>
-            <div className="mt-3 flex flex-wrap gap-1.5">
-          {categories.map((category, index) => (
-              <Link key={category} href={`/ilan-ver?category=${encodeURIComponent(category)}`} className={`rounded-full border px-2.5 py-1.5 text-xs font-bold ${categoryColors[index % categoryColors.length]}`}>
-              {category}
-              </Link>
-          ))}
-            </div>
+            {menuStep === "type" ? (
+              <>
+                <div className="grid gap-2">
+                  <button type="button" onClick={() => chooseType("ilan")} className="flex items-center gap-2 rounded-2xl border border-amber-200 bg-amber-100 px-3 py-3 text-left text-sm font-black text-amber-950 transition hover:-translate-y-0.5">
+                    <MessageSquarePlus size={18} />
+                    Yeni ilan as
+                  </button>
+                  <button type="button" onClick={() => chooseType("duvar-yazisi")} className="flex items-center gap-2 rounded-2xl border border-sky-200 bg-sky-100 px-3 py-3 text-left text-sm font-black text-sky-950 transition hover:-translate-y-0.5">
+                    <PenLine size={18} />
+                    Duvar yazısı bırak
+                  </button>
+                </div>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {categories.map((category, index) => (
+                    <Link key={category} href={`/ilan-ver?category=${encodeURIComponent(category)}`} className={`rounded-full border px-2.5 py-1.5 text-xs font-bold ${categoryColors[index % categoryColors.length]}`}>
+                      {category}
+                    </Link>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="grid grid-cols-2 gap-2">
+                {paperOptions.map((paper, index) => (
+                  <Link
+                    key={paper.id}
+                    href={`/ilan-ver?type=${selectedType}&paper=${paper.id}`}
+                    className={`paper-choice paper-note ${paper.shape} ${paper.shell} border p-3 text-left text-stone-900 transition hover:-translate-y-1`}
+                    style={{ transform: `rotate(${index % 2 === 0 ? -1.5 : 1.5}deg)` }}
+                  >
+                    <span className="paper-tape" aria-hidden="true" />
+                    <span className="block text-[11px] font-black uppercase tracking-wide text-stone-600">{paper.shortLabel}</span>
+                    <span className="mt-2 block text-sm font-black leading-tight">{paper.sample}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -173,13 +208,15 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
             "--my": `${layout.my}%`,
             "--mw": `${layout.mw}%`,
             "--r": `${layout.r}deg`,
+            "--h": `${layout.h}px`,
+            "--mh": `${layout.mh}px`,
             zIndex: stack[post.id] ?? (isActive ? 80 : layout.z),
           };
 
           return (
             <article
               key={post.id}
-              onPointerDown={(event) => {
+              onMouseDown={(event) => {
                 event.stopPropagation();
                 bringToFront(post.id);
               }}
@@ -201,7 +238,7 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
               </button>
 
               <div className="mb-3 flex flex-wrap items-center gap-2 text-xs font-bold">
-                <span className="rounded-full bg-white/80 px-3 py-1 text-stone-800 shadow-sm">{style.label}</span>
+                <span className="rounded-full bg-white/80 px-3 py-1 text-stone-800 shadow-sm">{style.shortLabel}</span>
                 <span className="rounded-full bg-white/70 px-3 py-1 text-stone-700 shadow-sm">{post.category}</span>
                 <span className="rounded-full border border-stone-900 bg-amber-200 px-3 py-1 text-stone-950">{post.type === "ilan" ? "İlan" : "Duvar Yazısı"}</span>
                 <span className="text-stone-500">{post.createdAt}</span>
@@ -215,7 +252,7 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
                 </div>
                 <Link
                   href={"/ilan/" + post.id}
-                  onPointerDown={(event) => event.stopPropagation()}
+                  onMouseDown={(event) => event.stopPropagation()}
                   className="inline-flex items-center gap-2 rounded-full bg-white/85 px-4 py-2 text-sm font-bold text-stone-800 shadow-sm transition hover:bg-stone-950 hover:text-white"
                 >
                   <MessageCircle size={17} />
