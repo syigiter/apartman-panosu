@@ -77,7 +77,7 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
   }
 
   return (
-    <section id="pano" className="h-[calc(100vh-77px)] p-2 md:p-4">
+    <section id="pano" className="h-screen p-2 md:p-4">
       <div
         className="cork-board board-shadow relative h-full overflow-hidden rounded-[28px] border-[10px] border-amber-950/75 p-4"
         onPointerDown={openBoardMenu}
@@ -85,7 +85,15 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
         <div className="pointer-events-none absolute inset-5 rounded-[24px] border border-white/20 bg-white/8" />
 
         <div
-          className="absolute left-5 top-5 z-[35] max-w-xl rounded-3xl border border-stone-200 bg-white/82 p-3 paper-shadow backdrop-blur"
+          className="absolute right-5 top-5 z-[36] hidden rounded-2xl border-2 border-stone-950 bg-amber-300 px-4 py-3 text-sm font-black text-stone-950 shadow-lg md:block"
+          onPointerDown={(event) => event.stopPropagation()}
+        >
+          Apartman Panosu
+          <span className="block text-[11px] font-bold">Komşu notları burada</span>
+        </div>
+
+        <div
+          className="absolute left-5 top-5 z-[35] max-w-[calc(100%-40px)] rounded-3xl border border-stone-200 bg-white/82 p-3 paper-shadow backdrop-blur md:max-w-[620px]"
           onPointerDown={(event) => event.stopPropagation()}
         >
           <div className="mb-2 flex items-center gap-2">
