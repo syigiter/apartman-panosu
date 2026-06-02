@@ -17,6 +17,10 @@ type BoardNoteVars = CSSProperties & {
   "--r": string;
   "--h": string;
   "--mh": string;
+  "--cr": string;
+  "--sx": string;
+  "--sy": string;
+  "--tape-r": string;
 };
 
 const categoryColors = [
@@ -29,15 +33,17 @@ const categoryColors = [
 ];
 
 const layouts = [
-  { x: 16, y: 27, w: 30, h: 225, mx: 5, my: 13, mw: 78, mh: 232, r: -5, z: 12 },
-  { x: 31, y: 31, w: 43, h: 285, mx: 13, my: 38, mw: 82, mh: 285, r: 3, z: 16 },
-  { x: 58, y: 21, w: 25, h: 205, mx: 4, my: 66, mw: 72, mh: 218, r: -2, z: 10 },
-  { x: 18, y: 56, w: 36, h: 245, mx: 20, my: 92, mw: 74, mh: 245, r: 5, z: 14 },
-  { x: 49, y: 55, w: 32, h: 255, mx: 8, my: 120, mw: 78, mh: 258, r: -4, z: 9 },
-  { x: 67, y: 43, w: 22, h: 235, mx: 24, my: 148, mw: 66, mh: 238, r: 7, z: 11 },
-  { x: 24, y: 21, w: 24, h: 215, mx: 10, my: 176, mw: 70, mh: 218, r: 6, z: 8 },
-  { x: 38, y: 64, w: 40, h: 220, mx: 18, my: 205, mw: 80, mh: 228, r: -6, z: 7 },
+  { x: 16, y: 27, w: 30, h: 225, mx: 5, my: 13, mw: 78, mh: 232, r: -5, cr: 1.6, sx: 2, sy: -3, tr: 2, z: 12 },
+  { x: 31, y: 31, w: 43, h: 285, mx: 13, my: 38, mw: 82, mh: 285, r: 3, cr: -1.2, sx: -2, sy: 3, tr: -4, z: 16 },
+  { x: 58, y: 21, w: 25, h: 205, mx: 4, my: 66, mw: 72, mh: 218, r: -2, cr: 2.4, sx: 3, sy: 2, tr: 8, z: 10 },
+  { x: 18, y: 56, w: 36, h: 245, mx: 20, my: 92, mw: 74, mh: 245, r: 5, cr: -2.1, sx: -3, sy: -2, tr: -7, z: 14 },
+  { x: 49, y: 55, w: 32, h: 255, mx: 8, my: 120, mw: 78, mh: 258, r: -4, cr: 1.2, sx: 1, sy: 4, tr: 4, z: 9 },
+  { x: 67, y: 43, w: 22, h: 235, mx: 24, my: 148, mw: 66, mh: 238, r: 7, cr: -2.8, sx: -2, sy: 1, tr: -10, z: 11 },
+  { x: 24, y: 21, w: 24, h: 215, mx: 10, my: 176, mw: 70, mh: 218, r: 6, cr: 2.2, sx: 2, sy: 2, tr: 7, z: 8 },
+  { x: 38, y: 64, w: 40, h: 220, mx: 18, my: 205, mw: 80, mh: 228, r: -6, cr: -1.8, sx: -1, sy: -3, tr: -5, z: 7 },
 ];
+
+const attachmentStyles = ["attach-tape-pin", "attach-double-tape", "attach-corner-pin", "attach-side-tape", "attach-thumbtack"];
 
 function hashText(value: string) {
   return [...value].reduce((hash, char) => hash + char.charCodeAt(0), 0);
@@ -47,7 +53,8 @@ function noteMeta(post: BoardPost, index: number) {
   const hash = hashText(post.id + post.category + post.title);
   const layout = layouts[(hash + index) % layouts.length];
   const style = paperOptions[(hash + index * 3) % paperOptions.length];
-  return { layout, style };
+  const attachment = attachmentStyles[(hash + index * 5) % attachmentStyles.length];
+  return { attachment, layout, style };
 }
 
 export function InteractiveBoard({ posts, categories, missingEnv }: { posts: BoardPost[]; categories: string[]; missingEnv?: boolean }) {
@@ -198,7 +205,7 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
         )}
 
         {posts.map((post, index) => {
-          const { layout, style } = noteMeta(post, index);
+          const { attachment, layout, style } = noteMeta(post, index);
           const isActive = activeId === post.id;
           const noteVars: BoardNoteVars = {
             "--x": `${layout.x}%`,
@@ -210,6 +217,10 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
             "--r": `${layout.r}deg`,
             "--h": `${layout.h}px`,
             "--mh": `${layout.mh}px`,
+            "--cr": `${layout.cr}deg`,
+            "--sx": `${layout.sx}px`,
+            "--sy": `${layout.sy}px`,
+            "--tape-r": `${layout.tr}deg`,
             zIndex: stack[post.id] ?? (isActive ? 80 : layout.z),
           };
 
@@ -220,10 +231,12 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
                 event.stopPropagation();
                 bringToFront(post.id);
               }}
-              className={`board-note-position paper-note ${style.shape} ${style.shell} paper-shadow border p-5 transition duration-200 ${isActive ? "scale-[1.025]" : "hover:scale-[1.015]"}`}
+              className={`board-note-position paper-note realistic-note ${attachment} ${style.shape} ${style.shell} paper-shadow border p-5 transition duration-200 ${isActive ? "scale-[1.025]" : "hover:scale-[1.015]"}`}
               style={noteVars}
             >
               <span className="paper-tape" aria-hidden="true" />
+              <span className="paper-pin" aria-hidden="true" />
+              <span className="paper-curl" aria-hidden="true" />
               <button
                 type="button"
                 onClick={(event) => {
