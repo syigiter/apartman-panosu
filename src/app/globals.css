@@ -31,13 +31,10 @@ button, input, textarea, select { font: inherit; }
 .cork-board {
   background-color: #b87435;
   background:
-    radial-gradient(ellipse at 18% 22%, rgba(255, 219, 145, 0.36) 0 2px, transparent 3px) 0 0 / 31px 27px,
-    radial-gradient(ellipse at 70% 32%, rgba(82, 45, 18, 0.22) 0 1.5px, transparent 2.7px) 7px 11px / 23px 19px,
-    radial-gradient(circle at 48% 72%, rgba(255, 244, 204, 0.2) 0 1px, transparent 2px) 3px 5px / 17px 15px,
-    repeating-linear-gradient(12deg, rgba(83, 45, 18, 0.08) 0 1px, transparent 1px 9px),
-    repeating-linear-gradient(103deg, rgba(255, 218, 143, 0.1) 0 1px, transparent 1px 11px),
-    linear-gradient(135deg, #d29550 0%, #bf7637 33%, #a7602c 68%, #8c4f24 100%);
-  background-blend-mode: multiply, normal, screen, multiply, screen, normal;
+    linear-gradient(rgba(92, 48, 18, 0.02), rgba(48, 24, 8, 0.12)),
+    url("/images/board/apartment-cork-board-1400.jpg") center 44% / auto 128% no-repeat,
+    linear-gradient(135deg, #d29550 0%, #bf7637 48%, #8c4f24 100%);
+  background-blend-mode: multiply, normal, normal;
   isolation: isolate;
 }
 .cork-board::before,
@@ -50,23 +47,22 @@ button, input, textarea, select { font: inherit; }
 }
 .cork-board::before {
   background:
-    radial-gradient(circle at 15% 18%, rgba(76, 39, 15, 0.22) 0 1px, transparent 1.8px) 0 0 / 9px 10px,
-    radial-gradient(circle at 66% 48%, rgba(255, 222, 154, 0.2) 0 1px, transparent 1.7px) 4px 6px / 13px 12px,
-    radial-gradient(ellipse at 40% 30%, rgba(72, 35, 12, 0.18) 0 0.7px, transparent 1.4px) 2px 0 / 7px 8px;
+    radial-gradient(circle at 15% 18%, rgba(76, 39, 15, 0.1) 0 1px, transparent 1.8px) 0 0 / 9px 10px,
+    radial-gradient(circle at 66% 48%, rgba(255, 222, 154, 0.12) 0 1px, transparent 1.7px) 4px 6px / 13px 12px;
   mix-blend-mode: multiply;
-  opacity: 0.72;
+  opacity: 0.26;
   z-index: 0;
 }
 .cork-board::after {
   background:
-    radial-gradient(ellipse at 24% 18%, rgba(255, 214, 125, 0.14) 0 70px, transparent 150px),
-    radial-gradient(ellipse at 82% 76%, rgba(69, 32, 10, 0.2) 0 90px, transparent 190px),
-    linear-gradient(90deg, rgba(42, 20, 7, 0.22), transparent 10%, transparent 90%, rgba(42, 20, 7, 0.22)),
-    linear-gradient(180deg, rgba(255, 220, 150, 0.14), transparent 16%, transparent 84%, rgba(42, 20, 7, 0.22));
+    radial-gradient(ellipse at 24% 18%, rgba(255, 214, 125, 0.08) 0 70px, transparent 150px),
+    radial-gradient(ellipse at 82% 76%, rgba(69, 32, 10, 0.12) 0 90px, transparent 190px),
+    linear-gradient(90deg, rgba(42, 20, 7, 0.14), transparent 10%, transparent 90%, rgba(42, 20, 7, 0.14)),
+    linear-gradient(180deg, rgba(255, 220, 150, 0.08), transparent 16%, transparent 84%, rgba(42, 20, 7, 0.14));
   box-shadow:
-    inset 0 0 0 7px rgba(255, 224, 159, 0.08),
-    inset 0 0 0 16px rgba(61, 31, 10, 0.2),
-    inset 0 0 44px rgba(49, 24, 8, 0.42);
+    inset 0 0 0 7px rgba(255, 224, 159, 0.05),
+    inset 0 0 0 16px rgba(61, 31, 10, 0.12),
+    inset 0 0 44px rgba(49, 24, 8, 0.3);
   z-index: 0;
 }
 .paper-note {
