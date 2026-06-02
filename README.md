@@ -1,4 +1,4 @@
-# Apartman Panosu
+# Sokak Panosu
 
 Anonim ilan, duvar yazısı ve güvenli cevaplaşma uygulaması.
 

@@ -29,14 +29,14 @@ const categoryColors = [
 ];
 
 const layouts = [
-  { x: 3, y: 14, w: 30, h: 245, mx: 5, my: 13, mw: 78, mh: 232, r: -5, z: 12 },
-  { x: 27, y: 22, w: 45, h: 315, mx: 13, my: 38, mw: 82, mh: 285, r: 3, z: 16 },
-  { x: 60, y: 8, w: 26, h: 215, mx: 4, my: 66, mw: 72, mh: 218, r: -2, z: 10 },
-  { x: 10, y: 54, w: 38, h: 270, mx: 20, my: 92, mw: 74, mh: 245, r: 5, z: 14 },
-  { x: 48, y: 50, w: 34, h: 295, mx: 8, my: 120, mw: 78, mh: 258, r: -4, z: 9 },
-  { x: 70, y: 41, w: 22, h: 255, mx: 24, my: 148, mw: 66, mh: 238, r: 7, z: 11 },
-  { x: 21, y: 5, w: 24, h: 230, mx: 10, my: 176, mw: 70, mh: 218, r: 6, z: 8 },
-  { x: 40, y: 68, w: 42, h: 235, mx: 18, my: 205, mw: 80, mh: 228, r: -6, z: 7 },
+  { x: 16, y: 27, w: 30, h: 225, mx: 5, my: 13, mw: 78, mh: 232, r: -5, z: 12 },
+  { x: 31, y: 31, w: 43, h: 285, mx: 13, my: 38, mw: 82, mh: 285, r: 3, z: 16 },
+  { x: 58, y: 21, w: 25, h: 205, mx: 4, my: 66, mw: 72, mh: 218, r: -2, z: 10 },
+  { x: 18, y: 56, w: 36, h: 245, mx: 20, my: 92, mw: 74, mh: 245, r: 5, z: 14 },
+  { x: 49, y: 55, w: 32, h: 255, mx: 8, my: 120, mw: 78, mh: 258, r: -4, z: 9 },
+  { x: 67, y: 43, w: 22, h: 235, mx: 24, my: 148, mw: 66, mh: 238, r: 7, z: 11 },
+  { x: 24, y: 21, w: 24, h: 215, mx: 10, my: 176, mw: 70, mh: 218, r: 6, z: 8 },
+  { x: 38, y: 64, w: 40, h: 220, mx: 18, my: 205, mw: 80, mh: 228, r: -6, z: 7 },
 ];
 
 function hashText(value: string) {
@@ -92,8 +92,8 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
           className="absolute right-5 top-5 z-[36] hidden rounded-2xl border-2 border-stone-950 bg-amber-300 px-4 py-3 text-sm font-black text-stone-950 shadow-lg md:block"
           onMouseDown={(event) => event.stopPropagation()}
         >
-          Apartman Panosu
-          <span className="block text-[11px] font-bold">Komşu notları burada</span>
+          Sokak Panosu
+          <span className="block text-[11px] font-bold">Mahalle notları burada</span>
         </div>
 
         <div

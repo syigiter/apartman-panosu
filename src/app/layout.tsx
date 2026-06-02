@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Apartman Panosu",
-  description: "Anonim ilanlar, duvar yazıları ve güvenli apartman içi yazışmalar.",
+  title: "Sokak Panosu",
+  description: "Anonim ilanlar, duvar yazıları ve güvenli mahalle yazışmaları.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

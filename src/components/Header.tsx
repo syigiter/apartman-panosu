@@ -10,8 +10,8 @@ export function Header() {
             <MessageSquareText size={22} />
           </span>
           <span>
-            Apartman Panosu
-            <span className="block text-xs font-bold text-amber-800">Komşu notları burada</span>
+            Sokak Panosu
+            <span className="block text-xs font-bold text-amber-800">Mahalle notları burada</span>
           </span>
         </Link>
         <nav className="hidden items-center gap-2 text-sm font-bold text-stone-700 md:flex">

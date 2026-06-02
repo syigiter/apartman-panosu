@@ -32,7 +32,7 @@ button, input, textarea, select { font: inherit; }
   background-color: #b87435;
   background:
     linear-gradient(rgba(92, 48, 18, 0.02), rgba(48, 24, 8, 0.12)),
-    url("/images/board/apartment-cork-board-1400.jpg") center 44% / auto 128% no-repeat,
+    url("/images/board/street-notice-board-1400.jpg") center 44% / auto 128% no-repeat,
     linear-gradient(135deg, #d29550 0%, #bf7637 48%, #8c4f24 100%);
   background-blend-mode: multiply, normal, normal;
   isolation: isolate;

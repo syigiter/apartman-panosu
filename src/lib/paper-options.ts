@@ -12,7 +12,7 @@ export const paperOptions: PaperOption[] = [
     id: "sari-yirtik",
     label: "Sarı yırtık duyuru",
     shortLabel: "Sarı yırtık",
-    sample: "Apartman toplantısı",
+    sample: "Mahalle duyurusu",
     shell: "paper-yellow dot-paper border-amber-200 tape-wide pin-orange",
     shape: "torn-paper folded-corner",
   },
