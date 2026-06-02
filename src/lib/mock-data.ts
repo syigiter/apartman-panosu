@@ -7,6 +7,7 @@ export type BoardPost = {
   title: string;
   body: string;
   alias: string;
+  paperId?: string;
   replyCount: number;
   createdAt: string;
 };

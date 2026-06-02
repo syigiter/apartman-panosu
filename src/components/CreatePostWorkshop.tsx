@@ -5,6 +5,8 @@ import type { PostType } from "@/lib/mock-data";
 import { getPaperOption, paperOptions } from "@/lib/paper-options";
 import { ArrowLeft, Bell, Check, Eye, MessageSquarePlus, PenLine, Send, ShieldCheck, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import type { FormEvent } from "react";
 import { useState } from "react";
 
 type CreatePostWorkshopProps = {
@@ -26,12 +28,48 @@ const categoryColors = [
 ];
 
 export function CreatePostWorkshop({ categories, error, initialCategory, initialPaper, initialType, missingEnv }: CreatePostWorkshopProps) {
+  const router = useRouter();
   const [type, setType] = useState<PostType>(initialType);
   const [category, setCategory] = useState(initialCategory);
   const [paperId, setPaperId] = useState(initialPaper);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const selectedPaper = getPaperOption(paperId);
+
+  function createLocalPost(event: FormEvent<HTMLFormElement>) {
+    if (!missingEnv) return;
+
+    event.preventDefault();
+    const cleanTitle = title.trim();
+    const cleanBody = body.trim();
+    if (cleanTitle.length < 3 || cleanBody.length < 10) return;
+
+    const rawPosts = window.localStorage.getItem("sokak-panosu-posts");
+    let localPosts = [];
+    try {
+      localPosts = rawPosts ? JSON.parse(rawPosts) : [];
+    } catch {
+      window.localStorage.removeItem("sokak-panosu-posts");
+    }
+    window.localStorage.setItem(
+      "sokak-panosu-posts",
+      JSON.stringify([
+        {
+          id: `local-${Date.now()}`,
+          type,
+          category,
+          title: cleanTitle,
+          body: cleanBody,
+          alias: "Anonim ziyaretçi",
+          paperId,
+          replyCount: 0,
+          createdAt: "Şimdi",
+        },
+        ...localPosts,
+      ]),
+    );
+    router.push("/");
+  }
 
   return (
     <main className="min-h-screen p-2 md:p-4">
@@ -130,7 +168,7 @@ export function CreatePostWorkshop({ categories, error, initialCategory, initial
               </div>
             </div>
 
-            <form action={createPost} className={`paper-note pin-note paper-shadow rotate-[-0.4deg] border p-5 md:p-7 ${selectedPaper.shape} ${selectedPaper.shell}`}>
+            <form action={createPost} onSubmit={createLocalPost} className={`paper-note pin-note paper-shadow rotate-[-0.4deg] border p-5 md:p-7 ${selectedPaper.shape} ${selectedPaper.shell}`}>
               <input type="hidden" name="paper" value={paperId} />
               <input type="hidden" name="type" value={type} />
               <input type="hidden" name="category" value={category} />
@@ -170,7 +208,7 @@ export function CreatePostWorkshop({ categories, error, initialCategory, initial
 
               {missingEnv && (
                 <div className="mt-5 rounded-2xl border-2 border-dashed border-amber-400 bg-amber-100/80 p-4 text-sm font-bold text-amber-950">
-                  Kayıt için <code className="rounded bg-amber-200 px-1">.env.local</code> içine Supabase URL ve anon key eklenmeli.
+                  Supabase bağlanana kadar notlar bu tarayıcıda demo kayıt olarak saklanacak.
                 </div>
               )}
 

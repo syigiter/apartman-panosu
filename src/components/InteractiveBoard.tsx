@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, MessageCircle, MessageSquarePlus, MoveUpRight, PenLine, ShieldCheck, StickyNote, X } from "lucide-react";
 import type { BoardPost } from "@/lib/mock-data";
@@ -52,18 +52,34 @@ function hashText(value: string) {
 function noteMeta(post: BoardPost, index: number) {
   const hash = hashText(post.id + post.category + post.title);
   const layout = layouts[(hash + index) % layouts.length];
-  const style = paperOptions[(hash + index * 3) % paperOptions.length];
+  const style = paperOptions.find((paper) => paper.id === post.paperId) ?? paperOptions[(hash + index * 3) % paperOptions.length];
   const attachment = attachmentStyles[(hash + index * 5) % attachmentStyles.length];
   return { attachment, layout, style };
 }
 
 export function InteractiveBoard({ posts, categories, missingEnv }: { posts: BoardPost[]; categories: string[]; missingEnv?: boolean }) {
+  const [boardPosts, setBoardPosts] = useState(posts);
   const [activeId, setActiveId] = useState(posts[0]?.id ?? "");
   const [stack, setStack] = useState<Record<string, number>>({});
   const [counter, setCounter] = useState(40);
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
   const [menuStep, setMenuStep] = useState<"type" | "paper">("type");
   const [selectedType, setSelectedType] = useState<"ilan" | "duvar-yazisi">("ilan");
+
+  useEffect(() => {
+    const rawPosts = window.localStorage.getItem("sokak-panosu-posts");
+    if (!rawPosts) return;
+
+    try {
+      const localPosts = JSON.parse(rawPosts) as BoardPost[];
+      const existingIds = new Set(posts.map((post) => post.id));
+      const mergedPosts = [...localPosts.filter((post) => !existingIds.has(post.id)), ...posts];
+      setBoardPosts(mergedPosts);
+      setActiveId(mergedPosts[0]?.id ?? "");
+    } catch {
+      window.localStorage.removeItem("sokak-panosu-posts");
+    }
+  }, [posts]);
 
   function bringToFront(id: string) {
     setActiveId(id);
@@ -132,7 +148,7 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
             className="absolute bottom-5 right-5 z-[35] hidden max-w-md rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50/95 p-4 text-xs font-semibold text-amber-950 shadow-lg md:block"
             onMouseDown={(event) => event.stopPropagation()}
           >
-            Supabase bağlantısı henüz yok; pano şimdilik örnek notlarla dolu.
+            Supabase bağlantısı henüz yok; yeni notlar bu tarayıcıda demo olarak saklanır.
           </div>
         )}
 
@@ -204,7 +220,7 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
           </div>
         )}
 
-        {posts.map((post, index) => {
+        {boardPosts.map((post, index) => {
           const { attachment, layout, style } = noteMeta(post, index);
           const isActive = activeId === post.id;
           const noteVars: BoardNoteVars = {
