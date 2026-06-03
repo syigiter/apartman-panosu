@@ -43,6 +43,13 @@ const layouts = [
   { x: 44, y: 63, w: 31, h: 245, mx: 18, my: 205, mw: 80, mh: 228, r: -6, cr: -1.8, sx: -1, sy: -3, tr: -5, z: 7 },
 ];
 
+const localLayouts = [
+  { x: 36, y: 42, w: 22, h: 190, mx: 8, my: 18, mw: 72, mh: 210, r: -3, cr: 1.4, sx: 1, sy: -2, tr: 3, z: 18 },
+  { x: 52, y: 50, w: 20, h: 215, mx: 16, my: 47, mw: 70, mh: 220, r: 4, cr: -1.5, sx: -2, sy: 2, tr: -5, z: 17 },
+  { x: 28, y: 58, w: 24, h: 185, mx: 10, my: 76, mw: 74, mh: 205, r: 2, cr: 2, sx: 2, sy: 1, tr: 6, z: 16 },
+  { x: 66, y: 34, w: 18, h: 225, mx: 20, my: 105, mw: 66, mh: 215, r: -5, cr: -2, sx: -1, sy: 3, tr: -8, z: 15 },
+];
+
 const attachmentStyles = ["attach-tape-pin", "attach-double-tape", "attach-corner-pin", "attach-side-tape", "attach-thumbtack"];
 
 function hashText(value: string) {
@@ -51,7 +58,9 @@ function hashText(value: string) {
 
 function noteMeta(post: BoardPost, index: number) {
   const hash = hashText(post.id + post.category + post.title);
-  const layout = layouts[(hash + index) % layouts.length];
+  const isLocal = post.id.startsWith("local-");
+  const layoutSet = isLocal ? localLayouts : layouts;
+  const layout = layoutSet[(hash + index) % layoutSet.length];
   const style = paperOptions.find((paper) => paper.id === post.paperId) ?? paperOptions[(hash + index * 3) % paperOptions.length];
   const attachment = attachmentStyles[(hash + index * 5) % attachmentStyles.length];
   return { attachment, layout, style };
@@ -65,21 +74,36 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
   const [menuStep, setMenuStep] = useState<"type" | "paper">("type");
   const [selectedType, setSelectedType] = useState<"ilan" | "duvar-yazisi">("ilan");
+  const [localCount, setLocalCount] = useState(0);
 
   useEffect(() => {
     const rawPosts = window.localStorage.getItem("sokak-panosu-posts");
-    if (!rawPosts) return;
+    if (!rawPosts) {
+      setLocalCount(0);
+      return;
+    }
 
     try {
       const localPosts = JSON.parse(rawPosts) as BoardPost[];
       const existingIds = new Set(posts.map((post) => post.id));
       const mergedPosts = [...localPosts.filter((post) => !existingIds.has(post.id)), ...posts];
       setBoardPosts(mergedPosts);
+      setLocalCount(localPosts.length);
       setActiveId(mergedPosts[0]?.id ?? "");
     } catch {
       window.localStorage.removeItem("sokak-panosu-posts");
+      setLocalCount(0);
     }
   }, [posts]);
+
+  function clearLocalPosts() {
+    window.localStorage.removeItem("sokak-panosu-posts");
+    setBoardPosts(posts);
+    setLocalCount(0);
+    setActiveId(posts[0]?.id ?? "");
+    setStack({});
+    setMenu(null);
+  }
 
   function bringToFront(id: string) {
     setActiveId(id);
@@ -149,6 +173,15 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
             onMouseDown={(event) => event.stopPropagation()}
           >
             Supabase bağlantısı henüz yok; yeni notlar bu tarayıcıda demo olarak saklanır.
+            {localCount > 0 && (
+              <button
+                type="button"
+                onClick={clearLocalPosts}
+                className="mt-3 block rounded-full bg-stone-950 px-3 py-2 text-xs font-black text-white transition hover:bg-amber-700"
+              >
+                Demo notları temizle
+              </button>
+            )}
           </div>
         )}
 
@@ -247,7 +280,7 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
                 event.stopPropagation();
                 bringToFront(post.id);
               }}
-              className={`board-note-position paper-note realistic-note ${attachment} ${style.shape} ${style.shell} paper-shadow border p-5 transition duration-200 ${isActive ? "scale-[1.025]" : "hover:scale-[1.015]"}`}
+              className={`board-note-position paper-note realistic-note ${attachment} ${style.shape} ${style.shell} paper-shadow border p-5 transition duration-200 ${isActive ? "scale-[1.015]" : "hover:scale-[1.01]"}`}
               style={noteVars}
             >
               <span className="paper-tape" aria-hidden="true" />
