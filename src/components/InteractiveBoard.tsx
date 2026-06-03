@@ -34,13 +34,13 @@ const categoryColors = [
 
 const layouts = [
   { x: 16, y: 31, w: 24, h: 205, mx: 5, my: 13, mw: 78, mh: 232, r: -7, cr: 1.6, sx: 2, sy: -3, tr: 2, z: 12 },
-  { x: 34, y: 35, w: 43, h: 175, mx: 13, my: 38, mw: 82, mh: 285, r: 2, cr: -1.2, sx: -2, sy: 3, tr: -4, z: 16 },
+  { x: 38, y: 35, w: 34, h: 180, mx: 13, my: 38, mw: 82, mh: 285, r: 2, cr: -1.2, sx: -2, sy: 3, tr: -4, z: 16 },
   { x: 62, y: 22, w: 20, h: 230, mx: 4, my: 66, mw: 72, mh: 218, r: -3, cr: 2.4, sx: 3, sy: 2, tr: 8, z: 10 },
   { x: 18, y: 56, w: 31, h: 280, mx: 20, my: 92, mw: 74, mh: 245, r: 5, cr: -2.1, sx: -3, sy: -2, tr: -7, z: 14 },
-  { x: 51, y: 54, w: 27, h: 300, mx: 8, my: 120, mw: 78, mh: 258, r: -4, cr: 1.2, sx: 1, sy: 4, tr: 4, z: 9 },
+  { x: 53, y: 54, w: 25, h: 290, mx: 8, my: 120, mw: 78, mh: 258, r: -4, cr: 1.2, sx: 1, sy: 4, tr: 4, z: 9 },
   { x: 69, y: 43, w: 18, h: 250, mx: 24, my: 148, mw: 66, mh: 238, r: 8, cr: -2.8, sx: -2, sy: 1, tr: -10, z: 11 },
   { x: 24, y: 22, w: 21, h: 185, mx: 10, my: 176, mw: 70, mh: 218, r: 6, cr: 2.2, sx: 2, sy: 2, tr: 7, z: 8 },
-  { x: 43, y: 63, w: 35, h: 255, mx: 18, my: 205, mw: 80, mh: 228, r: -6, cr: -1.8, sx: -1, sy: -3, tr: -5, z: 7 },
+  { x: 44, y: 63, w: 31, h: 245, mx: 18, my: 205, mw: 80, mh: 228, r: -6, cr: -1.8, sx: -1, sy: -3, tr: -5, z: 7 },
 ];
 
 const attachmentStyles = ["attach-tape-pin", "attach-double-tape", "attach-corner-pin", "attach-side-tape", "attach-thumbtack"];
