@@ -29,10 +29,10 @@ button, input, textarea, select { font: inherit; }
 }
 .paper-shadow {
   box-shadow:
-    calc(var(--sx, 0px) + 1px) calc(var(--sy, 0px) + 10px) 16px rgba(38, 22, 9, 0.23),
-    calc(var(--sx, 0px) + 6px) calc(var(--sy, 0px) + 18px) 26px rgba(38, 22, 9, 0.12),
-    0 2px 0 rgba(255,255,255,0.48) inset,
-    0 -2px 7px rgba(80, 45, 18, 0.1) inset;
+    calc(var(--sx, 0px) + 1px) calc(var(--sy, 0px) + 8px) 13px rgba(30, 18, 8, 0.24),
+    calc(var(--sx, 0px) + 4px) calc(var(--sy, 0px) + 15px) 23px rgba(30, 18, 8, 0.13),
+    0 1px 0 rgba(255,255,255,0.34) inset,
+    0 -2px 7px rgba(60, 38, 18, 0.12) inset;
 }
 .cork-board {
   background-color: #b87435;
@@ -76,29 +76,31 @@ button, input, textarea, select { font: inherit; }
   position: relative;
 }
 .realistic-note {
-  border-color: rgba(86, 52, 22, 0.12);
-  filter: saturate(0.94) contrast(0.99);
+  border-color: rgba(71, 47, 24, 0.08);
+  filter: saturate(0.82) contrast(0.96);
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   transform-origin: 50% 42%;
 }
 .realistic-note::before {
   background:
-    linear-gradient(103deg, rgba(255,255,255,0.28), transparent 17%, rgba(69, 43, 18, 0.05) 18%, transparent 36%),
-    linear-gradient(72deg, transparent 0 47%, rgba(82, 54, 25, 0.06) 48%, transparent 51%),
-    radial-gradient(circle at 18% 22%, rgba(255,255,255,0.38) 0 0.7px, transparent 1.4px) 0 0 / 13px 17px,
+    url("/images/textures/paper-fiber.jpg") center / 210px 210px repeat,
+    linear-gradient(103deg, rgba(255,255,255,0.18), transparent 17%, rgba(69, 43, 18, 0.05) 18%, transparent 36%),
+    linear-gradient(72deg, transparent 0 47%, rgba(82, 54, 25, 0.05) 48%, transparent 51%),
     radial-gradient(circle at 76% 61%, rgba(66, 42, 18, 0.08) 0 0.8px, transparent 1.6px) 5px 4px / 17px 15px;
   content: "";
   inset: 0;
   mix-blend-mode: multiply;
-  opacity: 0.48;
+  opacity: 0.36;
   pointer-events: none;
   position: absolute;
   z-index: -1;
 }
 .realistic-note::after {
   background:
-    linear-gradient(90deg, rgba(68, 42, 18, 0.1), transparent 8%, transparent 92%, rgba(68, 42, 18, 0.08)),
-    linear-gradient(180deg, rgba(255,255,255,0.18), transparent 16%, transparent 84%, rgba(68, 42, 18, 0.11));
+    radial-gradient(ellipse at 18% 14%, rgba(255,255,255,0.18) 0 22px, transparent 58px),
+    radial-gradient(ellipse at 79% 83%, rgba(58, 37, 18, 0.1) 0 24px, transparent 70px),
+    linear-gradient(90deg, rgba(68, 42, 18, 0.08), transparent 8%, transparent 92%, rgba(68, 42, 18, 0.07)),
+    linear-gradient(180deg, rgba(255,255,255,0.14), transparent 16%, transparent 84%, rgba(68, 42, 18, 0.1));
   content: "";
   inset: 0;
   pointer-events: none;
@@ -120,7 +122,9 @@ button, input, textarea, select { font: inherit; }
   z-index: 5;
 }
 .paper-curl {
-  background: linear-gradient(135deg, rgba(255,255,255,0.88), rgba(82, 50, 22, 0.13));
+  background:
+    url("/images/textures/paper-fiber.jpg") center / 180px 180px repeat,
+    linear-gradient(135deg, rgba(255,255,255,0.76), rgba(82, 50, 22, 0.15));
   bottom: 0;
   box-shadow: -5px -5px 10px rgba(68, 39, 16, 0.08);
   height: 26px;
@@ -221,19 +225,19 @@ button, input, textarea, select { font: inherit; }
     radial-gradient(ellipse at 18% 82%, rgba(139, 92, 38, 0.1) 0 16px, transparent 17px),
     linear-gradient(32deg, rgba(255,255,255,0.28), transparent 28%);
 }
-.paper-yellow { background-color: #f8e883; }
-.paper-blue { background-color: #bfe8fb; }
-.paper-green { background-color: #c9efcc; }
-.paper-pink { background-color: #f7c8d8; }
-.paper-purple { background-color: #d7b4f2; }
-.paper-orange { background-color: #f5ad62; }
+.paper-yellow { background-color: #eadb85; }
+.paper-blue { background-color: #b7d7df; }
+.paper-green { background-color: #c7d9bc; }
+.paper-pink { background-color: #dfb9c3; }
+.paper-purple { background-color: #c5acd4; }
+.paper-orange { background-color: #daa66b; }
 .paper-cream { background-color: #fffbe7; }
 .paper-tape {
   background:
     linear-gradient(90deg, rgba(255,255,255,0.22), transparent 18%, rgba(130, 88, 28, 0.08) 52%, transparent 86%),
-    rgba(255, 246, 188, 0.68);
+    rgba(238, 225, 166, 0.54);
   border: 1px solid rgba(146, 99, 28, 0.16);
-  box-shadow: 0 2px 5px rgba(80, 55, 20, 0.11);
+  box-shadow: 0 2px 5px rgba(80, 55, 20, 0.09);
   height: 18px;
   left: 50%;
   position: absolute;
@@ -325,23 +329,23 @@ button, input, textarea, select { font: inherit; }
 }
 .lined-paper {
   background-image:
-    repeating-linear-gradient(to bottom, rgba(37, 99, 235, 0.14) 0 1px, transparent 1px 28px),
-    linear-gradient(90deg, rgba(244, 63, 94, 0.16) 0 2px, transparent 2px),
-    linear-gradient(116deg, rgba(255,255,255,0.36), transparent 22%, rgba(70,50,20,0.05) 23%, transparent 43%);
+    repeating-linear-gradient(to bottom, rgba(47, 91, 138, 0.12) 0 1px, transparent 1px 24px),
+    linear-gradient(90deg, rgba(160, 57, 57, 0.12) 0 2px, transparent 2px),
+    linear-gradient(116deg, rgba(255,255,255,0.18), transparent 22%, rgba(70,50,20,0.05) 23%, transparent 43%);
   background-position: 0 22px, 42px 0, 0 0;
   background-size: 100% 100%, 100% 100%, 100% 100%;
 }
 .grid-paper {
   background-image:
-    linear-gradient(rgba(14, 165, 233, 0.13) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(14, 165, 233, 0.13) 1px, transparent 1px),
-    linear-gradient(38deg, transparent 0 21%, rgba(255,255,255,0.28) 22%, transparent 35%);
+    linear-gradient(rgba(43, 112, 143, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(43, 112, 143, 0.1) 1px, transparent 1px),
+    linear-gradient(38deg, transparent 0 21%, rgba(255,255,255,0.16) 22%, transparent 35%);
   background-size: 20px 20px, 20px 20px, 100% 100%;
 }
 .dot-paper {
   background-image:
-    radial-gradient(circle, rgba(120, 80, 30, 0.18) 1.2px, transparent 1.6px),
-    linear-gradient(116deg, rgba(255,255,255,0.32), transparent 22%, rgba(70,50,20,0.05) 23%, transparent 43%);
+    radial-gradient(circle, rgba(76, 56, 32, 0.13) 1.1px, transparent 1.6px),
+    linear-gradient(116deg, rgba(255,255,255,0.18), transparent 22%, rgba(70,50,20,0.05) 23%, transparent 43%);
   background-size: 18px 18px, 100% 100%;
 }
 .receipt-paper {
@@ -365,6 +369,20 @@ button, input, textarea, select { font: inherit; }
   top: var(--my);
   transform: rotate(var(--r));
   width: var(--mw);
+}
+.paper-meta span {
+  border-bottom: 1px solid rgba(45, 35, 24, 0.18);
+  letter-spacing: 0;
+}
+.paper-lift-handle {
+  background: rgba(255,255,255,0.12);
+  border-radius: 2px;
+  box-shadow: none;
+  opacity: 0.7;
+}
+.paper-lift-handle:hover {
+  background: rgba(255,255,255,0.28);
+  opacity: 1;
 }
 .paper-choice {
   min-height: 118px;

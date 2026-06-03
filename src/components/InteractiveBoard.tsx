@@ -3,7 +3,7 @@
 import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, MessageCircle, MessageSquarePlus, MoveUpRight, PenLine, ShieldCheck, StickyNote, X } from "lucide-react";
+import { ArrowLeft, MessageCircle, MessageSquarePlus, MoveUpRight, PenLine, StickyNote, X } from "lucide-react";
 import type { BoardPost } from "@/lib/mock-data";
 import { paperOptions } from "@/lib/paper-options";
 
@@ -293,31 +293,29 @@ export function InteractiveBoard({ posts, categories, missingEnv }: { posts: Boa
                   event.stopPropagation();
                   bringToFront(post.id);
                 }}
-                className="absolute -right-2 -top-2 z-[5] flex h-8 w-8 items-center justify-center rounded-full border-2 border-stone-950 bg-amber-300 text-stone-950 shadow-lg"
+                className="paper-lift-handle absolute right-1 top-1 z-[5] flex h-6 w-6 items-center justify-center text-stone-900/70 transition hover:text-stone-950"
                 aria-label={`${post.title} notunu öne getir`}
               >
-                <MoveUpRight size={15} />
+                <MoveUpRight size={14} />
               </button>
 
-              <div className="mb-2 flex flex-wrap items-center gap-1 text-[9px] font-bold leading-none">
-                <span className="rounded-full bg-white/78 px-2 py-1 text-stone-800 shadow-sm">{style.shortLabel}</span>
-                <span className="rounded-full bg-white/68 px-2 py-1 text-stone-700 shadow-sm">{post.category}</span>
-                <span className="rounded-full border border-stone-900/80 bg-amber-200 px-2 py-1 text-stone-950">{post.type === "ilan" ? "İlan" : "Duvar Yazısı"}</span>
-                <span className="text-stone-500">{post.createdAt}</span>
+              <div className="paper-meta mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[9px] font-black uppercase leading-none text-stone-700/80">
+                <span>{post.category}</span>
+                <span>{post.type === "ilan" ? "İlan" : "Duvar Yazısı"}</span>
+                <span>{post.createdAt}</span>
               </div>
               <h3 className="line-clamp-2 text-[15px] font-black leading-tight text-stone-950 md:text-base">{post.title}</h3>
               <p className="mt-2 line-clamp-3 text-[11px] leading-4 text-stone-700 md:line-clamp-4">{post.body}</p>
               <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 border-t border-stone-900/10 pt-2.5">
-                <div className="flex items-center gap-1.5 text-[10px] font-semibold text-stone-500">
-                  <ShieldCheck size={13} className="text-emerald-700" />
+                <div className="text-[9px] font-bold text-stone-500/90">
                   {post.alias} - gizli
                 </div>
                 <Link
                   href={"/ilan/" + post.id}
                   onMouseDown={(event) => event.stopPropagation()}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-white/85 px-3 py-1.5 text-xs font-bold text-stone-800 shadow-sm transition hover:bg-stone-950 hover:text-white"
+                  className="inline-flex items-center gap-1 rounded-sm border border-stone-900/20 bg-white/35 px-2 py-1 text-[10px] font-black text-stone-800/90 transition hover:bg-stone-950 hover:text-white"
                 >
-                  <MessageCircle size={14} />
+                  <MessageCircle size={12} />
                   {post.replyCount} cevap
                 </Link>
               </div>
